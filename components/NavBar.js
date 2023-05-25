@@ -1,18 +1,22 @@
 'use client';
 import React from 'react'
 import Link from 'next/link'
-import { useState } from 'react';
+import { useState, useEffect, useContext } from 'react';
+import AuthContext from '@/context/AuthContext'
+
 
 const Navbar = () => {
-
+ 
   const [isActive, setisActive] = useState(false);
+  let {user} = useContext(AuthContext);
 
+  
 
   return (
     <div>
-      <nav class="navbar" role="navigation" aria-label="main navigation">
-  <div class="navbar-brand">
-    <a class="navbar-item" href="https://bulma.io">
+      <nav className="navbar" role="navigation" aria-label="main navigation">
+  <div className="navbar-brand">
+    <a className="navbar-item" href="https://bulma.io">
       <img src="https://upload.wikimedia.org/wikipedia/en/thumb/1/18/Republic_of_Singapore_Navy_Crest.svg/1200px-Republic_of_Singapore_Navy_Crest.svg.png" width="42" height="42" />
     </a>
 
@@ -24,49 +28,78 @@ const Navbar = () => {
   </div>
 
   <div id="navbarBasicExample" className={`navbar-menu ${isActive ? "is-active" : ""}`}>
-    <div class="navbar-start">
-    <Link class="navbar-item" href="/">Home</Link>
+    <div className="navbar-start">
+    <Link className="navbar-item" href="/">Home</Link>
 
-      <a class="navbar-item">
+
+    {user ? (
+      <>
+      <a className="navbar-item">
         Schedule
       </a>
 
-      <div class="navbar-item has-dropdown is-hoverable">
-        <a class="navbar-link">
+      <div className="navbar-item has-dropdown is-hoverable">
+        <a className="navbar-link">
           Bookings
         </a>
 
-        <div class="navbar-dropdown">
-        <Link class="navbar-item" href="/book">Book a slot</Link>
+        <div className="navbar-dropdown">
+        <Link className="navbar-item" href="/book">Book a slot</Link>
     
-            <Link class="navbar-item" href="/view">View bookings</Link>
+            <Link className="navbar-item" href="/view">View bookings</Link>
          
-          <a class="navbar-item">
+          <a className="navbar-item">
             Cancel/Edit booking
           </a>
-          <hr class="navbar-divider" />
-          <a class="navbar-item">
+          <hr className="navbar-divider" />
+          <a className="navbar-item">
             Report an issue
           </a>
         </div>
       </div>
-    </div>
 
-    <div class="navbar-end">
-      <div class="navbar-item">
-        <div class="buttons">
-          <a class="button is-primary">
-            <strong>Sign up</strong>
-          </a>
-          <a class="button is-light">
-            Log in
-          </a>
+      <div className="navbar-end">
+              <div className="navbar-item">
+                <div className="buttons">
+                <Link className="navbar-item" href="/" onClick={() => localStorage.clear() } > Logout</Link>
+              
+          
+          
+          </div>
         </div>
       </div>
+  </>
+    ) : (
+      <>
+      <div className="navbar-end">
+      <div className="navbar-item">
+        <div className="buttons">   
+        <Link className="navbar-item" href="/login">Login</Link>
+         
+            </div>
+      </div>
     </div>
+    <div className="navbar-end">
+      <div className="navbar-item">
+        <div className="buttons"></div>
+           <a className="button is-primary">
+            <strong>Sign up</strong>
+          </a>
+          </div>
+          </div>
+    
+    </>
+    )}
+    
+            
+        
+        
+          </div>
+ 
   </div>
 </nav>
     </div>
+
   )
 }
 
