@@ -9,7 +9,7 @@ export default function Home() {
 
   return (
     
-     (!isLoggedOut) ? (
+     (user && !isLoggedOut) ? (
       <section className="section is-medium">
         
   <h1 className="title">Welcome {user.username}</h1>

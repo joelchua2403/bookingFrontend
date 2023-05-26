@@ -12,19 +12,22 @@ export const BookingProvider = ({ children }) => {
 
     const [booking, setBooking] = useState([])
 
+    const [refreshNeeded, setRefreshNeeded] = useState(false)
+
 
     const getBooking = async () => {
         let res = await fetch("http://localhost:8000/api/view/all")
         let data = await res.json()
         setBooking(data.filter(booking => booking.vesselName === user.username))
-        console.log(data)
+        setRefreshNeeded(false)
+        console.log("data", data)
       }
 
       const getAllBookings = async () => {
         let res = await fetch("http://localhost:8000/api/view/all")
         let data = await res.json()
         setBooking(data)
-        console.log(data)
+        console.log( data)
         }
 
         const getBookingById = async (id) => {
@@ -38,7 +41,9 @@ export const BookingProvider = ({ children }) => {
         booking: booking,
         getBooking: getBooking,
         getAllBookings: getAllBookings,
-        getBookingById: getBookingById
+        getBookingById: getBookingById,
+        refreshNeeded: refreshNeeded,
+        setRefreshNeeded: setRefreshNeeded
 
     }
 

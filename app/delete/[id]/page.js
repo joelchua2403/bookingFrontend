@@ -8,7 +8,7 @@ import AuthContext from '@/context/AuthContext'
 const page = ({params}) => {
 
  const {user} = useContext(AuthContext)
- const {booking, getBookingById} = useContext(BookingContext)
+ const {booking, getBookingById, setRefreshNeeded} = useContext(BookingContext)
 
 const router = useRouter();
 useEffect(() => {
@@ -45,8 +45,16 @@ const deleteBooking = async (id) => {
   <h3><strong>Your message: </strong>{booking.message}</h3>
     </div>
         
-        <button className="button is-info is-light" onClick={() => deleteBooking(booking.id)}>Yes</button>
-        <button  className="button is-danger is-light" onClick={() => router.push('/view')}>No</button>
+        <button className="button is-info is-light" 
+        onClick={() => {
+            deleteBooking(booking.id)
+            setRefreshNeeded(true)
+        }}>Yes</button>
+        <button  className="button is-danger is-light" 
+        onClick={() => {
+            setRefreshNeeded(true)
+            router.push(`/view/${user.username}}`)
+        }}>No</button>
     </div>
     </section>
   )
