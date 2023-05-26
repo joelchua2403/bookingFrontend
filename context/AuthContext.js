@@ -10,11 +10,15 @@ import { useRouter } from 'next/navigation';
 
     const router = useRouter();
     
+    const [isLoggedOut, setIsLoggedOut] = useState(false)
     let [user, setUser] = useState(localStorage.getItem('authTokens') ? jwt_decode(localStorage.getItem('authTokens')) : null )
     let [authTokens, setAuthTokens] = useState(localStorage.getItem('authTokens') ? JSON.parse(localStorage.getItem('authTokens')) : null ) 
+
+
     const loginUser = async (e) => {
         e.preventDefault()
         console.log("form submitted")
+        setIsLoggedOut(false)
 
         let res = await fetch("http://localhost:8000/api/token/", {
             method: 'POST',
@@ -40,7 +44,9 @@ import { useRouter } from 'next/navigation';
 
     let contextData = {
         user: user,
-        loginUser: loginUser
+        loginUser: loginUser,
+        isLoggedOut: isLoggedOut,
+        setIsLoggedOut: setIsLoggedOut
     }
 
     return(

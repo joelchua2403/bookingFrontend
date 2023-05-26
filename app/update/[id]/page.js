@@ -2,13 +2,20 @@
 import React, {useState} from 'react';
 import { useSession } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
-import Form from '@/components/CreateForm';
 import { useContext } from 'react';
 import AuthContext from '@/context/AuthContext';
+import BookingContext from '@/context/BookingContext';
+import Form from '@/components/UpdateForm';
 
 
-const page = () => {
+const page = ({params}) => {
+    const router = useRouter();
+   
+  
+
+    const {booking, getBooking} = useContext(BookingContext)
     const [submitting, setSubmitting] = useState(false);
+    const [updating, setUpdating] = useState(false);
     let {user} = useContext(AuthContext);
     const [post , setPost] = useState({
         vesselName: '',
@@ -18,16 +25,17 @@ const page = () => {
         message: ''
     }); 
 
-  
-    const handleSubmit = async (e) => {
+    const handleUpdateSubmit = async (e) => {
         e.preventDefault();
+        console.log(params.id);
         setSubmitting(true);
+        setUpdating(true);
         console.log(post);
 
         try {
-            const response = await fetch('http://localhost:8000/api/create/', 
+            const response = await fetch(`http://localhost:8000/api/update/${params.id}/`, 
             {
-                method: 'POST',
+                method: 'PUT',
                 body: JSON.stringify(post),
                 headers: {
                     'Content-Type': 'application/json',
@@ -37,38 +45,35 @@ const page = () => {
         );
 
         if (response.ok) {
-          alert('Booking created successfully');
             router.push('/');
         }
     } catch (error) {
             console.log(error);
         } finally {
         setSubmitting(false);
+        setUpdating(false);
     }
     }   
 
   return (
     <div>
          <section className="section is-medium">
-  <h1 className="title">Make booking</h1>
+  <h1 className="title">Update booking</h1>
   <h2 className="subtitle">
-    Book a berth and timeslot for your vessel
+     Update your booking here
   </h2>
 </section>
-{/* <BookingForm 
-type='create'
-post={post}
-setPost={setPost}
-submitting={submitting}
-handleSubmit={handleSubmit}
-/> */}
+
 
 <Form 
 post={post}
 setPost={setPost}
 submitting={submitting}
-handleSubmit={handleSubmit}
+handleUpdateSubmit={handleUpdateSubmit}
 setSubmitting={setSubmitting}
+updating={updating}
+setUpdating={setUpdating}
+booking={booking}
 />
 
     </div>

@@ -3,6 +3,7 @@ import './globals.css'
 import { Inter } from 'next/font/google'
 import NavBar from '../components/NavBar'
 import { AuthProvider } from '@/context/AuthContext'
+import { BookingProvider } from '@/context/BookingContext';
 
 
 
@@ -22,8 +23,9 @@ export default function RootLayout({ children }) {
       <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.4/css/bulma.min.css"></link>
         <title>Harbour Booking</title>
         </head>
-     
+
         <AuthProvider>
+        <BookingProvider>
       <body className={inter.className}>
       <NavBar/>
         
@@ -31,6 +33,7 @@ export default function RootLayout({ children }) {
     
      
       </body>
+      </BookingProvider>
       </AuthProvider>
     </html>
  

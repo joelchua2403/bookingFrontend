@@ -3,12 +3,14 @@ import DigitalClockAmPm from './DigitalClockAmPm'
 import { useContext, useEffect } from 'react'
 import AuthContext from '@/context/AuthContext'
 
-const Form = ({ post, setPost, submitting, handleSubmit,  }) => {
+const Form = ({ post, setPost, submitting, handleSubmit, updating, handleUpdateSubmit, booking }) => {
 
   let {user} = useContext(AuthContext)
   useEffect(() => {
     setPost({...post, vesselName: user.username})
   }, [])
+
+  console.log(updating)
 
   return (
     <div>
@@ -23,19 +25,19 @@ const Form = ({ post, setPost, submitting, handleSubmit,  }) => {
   <div className="control">
     <div className="select">
       <select onChange={(e) => setPost({...post, berth: e.target.value})}>
-      <option disabled="true">Select Berth</option >
+      <option>Select Berth</option >
     <option value="B01">B01</option >
     <option value="B02">B02</option >
-    <option value="B02">B03</option >
-    <option value="B02">B04</option >
-    <option value="B02">B05</option >
-    <option value="B02">B06</option >
-    <option value="B02">B07</option >
-    <option value="B02">B08</option >
-    <option value="B02">B09</option >
-    <option value="B02">B010</option >
-    <option value="B02">B11</option >
-    <option value="B02">B12</option >
+    <option value="B03">B03</option >
+    <option value="B04">B04</option >
+    <option value="B05">B05</option >
+    <option value="B06">B06</option >
+    <option value="B07">B07</option >
+    <option value="B08">B08</option >
+    <option value="B09">B09</option >
+    <option value="B10">B010</option >
+    <option value="B11">B11</option >
+    <option value="B12">B12</option >
       </select>
     </div>
   </div>
@@ -101,14 +103,24 @@ const Form = ({ post, setPost, submitting, handleSubmit,  }) => {
 <div className="field">
   <label className="label">Message</label>
   <div className="control">
-    <textarea className="textarea" placeholder="Textarea" onChange={(e) => setPost({...post, message: e.target.value})}></textarea>
+    <textarea className="textarea" placeholder="Nil if none" onChange={(e) => setPost({...post, message: e.target.value})}></textarea>
   </div>
 </div>
 
+
+
 <div className="field is-grouped">
+{(updating) ? (
+  <div className="control">
+    <button className="button is-link" onClick={handleUpdateSubmit}>Edit</button>
+  </div>
+) : (
   <div className="control">
     <button className="button is-link" onClick={handleSubmit}>Submit</button>
   </div>
+)}
+
+  
   <div className="control">
     <button className="button is-link is-light">Cancel</button>
   </div>

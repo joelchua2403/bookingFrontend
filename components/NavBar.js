@@ -3,14 +3,26 @@ import React from 'react'
 import Link from 'next/link'
 import { useState, useEffect, useContext } from 'react';
 import AuthContext from '@/context/AuthContext'
+import { useRouter } from 'next/navigation';
 
 
 const Navbar = () => {
  
   const [isActive, setisActive] = useState(false);
-  let {user} = useContext(AuthContext);
+  let {user, setIsLoggedOut} = useContext(AuthContext);
+  const [newUser, setNewUser] = useState(user);
+  const router = useRouter();
+
+  const logout = () => {
+    localStorage.clear();
+    setNewUser(null);
+    setIsLoggedOut(true);
+  }
 
   
+  useEffect(() => {
+    setNewUser(user);
+  }, [user])
 
   return (
     <div>
@@ -32,7 +44,7 @@ const Navbar = () => {
     <Link className="navbar-item" href="/">Home</Link>
 
 
-    {user ? (
+    {newUser ? (
       <>
       <a className="navbar-item">
         Schedule
@@ -46,7 +58,7 @@ const Navbar = () => {
         <div className="navbar-dropdown">
         <Link className="navbar-item" href="/book">Book a slot</Link>
     
-            <Link className="navbar-item" href="/view">View bookings</Link>
+            <Link className="navbar-item" href={`/view/${encodeURIComponent(user.username)}`}>View bookings</Link>
          
           <a className="navbar-item">
             Cancel/Edit booking
@@ -61,7 +73,7 @@ const Navbar = () => {
       <div className="navbar-end">
               <div className="navbar-item">
                 <div className="buttons">
-                <Link className="navbar-item" href="/" onClick={() => localStorage.clear() } > Logout</Link>
+                <Link className="navbar-item" href="http://localhost:3000/" onClick={logout}>Logout</Link>
               
           
           
