@@ -1,16 +1,28 @@
-import React from 'react'
+import React, { useState } from 'react'
 import DigitalClockAmPm from './DigitalClockAmPm'
 import { useContext, useEffect } from 'react'
 import AuthContext from '@/context/AuthContext'
+import SlotPicker from 'slotpicker'
+import {format} from 'date-fns'
 
-const Form = ({ post, setPost, submitting, handleSubmit, updating, handleUpdateSubmit, booking }) => {
+const Form = ({ post, setPost, submitting, handleSubmit, updating, handleUpdateSubmit, booking, timingsBooked }) => {
 
   let {user} = useContext(AuthContext)
+
   useEffect(() => {
     setPost({...post, vesselName: user.username})
   }, [])
 
-  console.log(updating)
+  let newFrom;
+
+  useEffect(() => {
+    let from = post.time;
+    newFrom = from
+    setPost({...post, time: newFrom})
+    console.log(post.time)
+  }, [post.time])
+
+  
 
   return (
     <div>
@@ -89,15 +101,42 @@ const Form = ({ post, setPost, submitting, handleSubmit, updating, handleUpdateS
 <DigitalClockAmPm setPost={setPost} post={post}  />
 </div> */}
 
-<div className="field">
+{/* <div className="field">
     <label className="label">Select Time</label>
-    <input className="input" type="time" placeholder="Input Date" onChange={(e) => setPost({...post, time: e.target.value})}></input>
-</div>
+    <input className="input" type="time" placeholder="Input Date" disabled=timingsBooked {} onChange={(e) => setPost({...post, time: e.target.value})}></input>
+</div> */}
 
 {/* <div className="field">
   <label className="label">Select Timing To</label>
-<DigitalClockAmPm />
+<DigitalClockAmPm timingsBooked={timingsBooked} setPost={setPost} post={post}/>
 </div> */}
+
+<div className="field">
+  <label className="label">Select Timing</label>
+<SlotPicker
+  // Required, interval between two slots in minutes, 30 = 30 min
+  interval={30}
+  // Required, when user selects a time slot, you will get the 'from' selected value
+  onSelectTime={(from) => {
+    newFrom = from.format('HH:mm')
+    setPost({...post, time: newFrom})
+    // console.log(post.time)
+  }}
+  // Optional, array of unavailable time slots
+  unAvailableSlots={timingsBooked}
+  // Optional, 8AM the start of the slots
+  from={'00:00'}
+  // Optional, 09:00PM the end of the slots
+  to={'23:30'}
+  // Optional, 01:00 PM, will be selected by default
+  defaultSelectedTime={'13:00'}
+  // Optional, selected slot color
+  selectedSlotColor='#F09999'
+  // Optional, language of the displayed text, default is english (en)
+  lang='en'
+/>
+
+</div>
 
 <br></br>
 <div className="field">
