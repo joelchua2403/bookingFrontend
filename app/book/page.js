@@ -1,51 +1,46 @@
 'use client';
-import React, {useState} from 'react';
+import React, {useState, useEffect, use} from 'react';
 import { useSession } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
 import Form from '@/components/CreateForm';
 import { useContext } from 'react';
 import AuthContext from '@/context/AuthContext';
+import BookingContext from '@/context/BookingContext';
 
 
-const page = () => {
+const page = ({params}) => {
     const [submitting, setSubmitting] = useState(false);
     let {user} = useContext(AuthContext);
-    const [post , setPost] = useState({
-        vesselName: '',
-        berth: '',
-        date: '',
-        time: '',
-        message: ''
-    }); 
+    // let {getAllBookings, booking, setBooking} = useContext(BookingContext);
+   
+
+    // const [timingsBooked, setTimingsBooked] = useState([]);
+
+    let router = useRouter();
+
+    
+
+
+    // useEffect(() => {
+    //     const getBookingDate = async () => {
+    //         const response = await fetch(`http://localhost:8000/api/view/date/${params.date}/`);
+    //         const data = await response.json();
+    //         const timingsBooked = data.map((booking) => booking.time);
+    //         setTimingsBooked(timingsBooked);
+    //     }
+    //     getBookingDate();
+    // }, [post.date]);
+
+    // console.log([params.date]);
+    // console.log(timingsBooked);
+
+    // useEffect(() => {
+    //     getAllBookings();
+    //     console.log(booking);
+    // }, []);
+            
 
   
-    const handleSubmit = async (e) => {
-        e.preventDefault();
-        setSubmitting(true);
-        console.log(post);
-
-        try {
-            const response = await fetch('http://localhost:8000/api/create/', 
-            {
-                method: 'POST',
-                body: JSON.stringify(post),
-                headers: {
-                    'Content-Type': 'application/json',
-                }
-        }
-        
-        );
-
-        if (response.ok) {
-          alert('Booking created successfully');
-            router.push('/');
-        }
-    } catch (error) {
-            console.log(error);
-        } finally {
-        setSubmitting(false);
-    }
-    }   
 
   return (
     <div>
@@ -55,23 +50,25 @@ const page = () => {
     Book a berth and timeslot for your vessel
   </h2>
 </section>
-{/* <BookingForm 
-type='create'
-post={post}
-setPost={setPost}
-submitting={submitting}
-handleSubmit={handleSubmit}
-/> */}
 
-<Form 
-post={post}
-setPost={setPost}
-submitting={submitting}
-handleSubmit={handleSubmit}
-setSubmitting={setSubmitting}
-/>
+ <div className="field">
+<label className="label">Vessel Name</label>
+<div className="control">
+<input disabled className="input" value={user.username} placeholder={user.username} />
+</div>
+</div>
 
-    </div>
+
+<div className="field">
+<label className="label">Select Date</label>
+<input className="input" type="date" placeholder="Input Date" onChange={(e) => {
+  router.push(`/book/${e.target.value}`);
+}}
+  ></input>
+</div>
+</div>
+
+
   )
 }
 

@@ -1,5 +1,5 @@
 'use client';
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import { useSession } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
 import { useContext } from 'react';
@@ -10,10 +10,7 @@ import Form from '@/components/UpdateForm';
 
 const page = ({params}) => {
     const router = useRouter();
-   
-  
-
-    const {booking, getBooking} = useContext(BookingContext)
+    const {booking, getBooking, timingsBooked, setTimingsBooked} = useContext(BookingContext)
     const [submitting, setSubmitting] = useState(false);
     const [updating, setUpdating] = useState(false);
     let {user} = useContext(AuthContext);
@@ -24,6 +21,20 @@ const page = ({params}) => {
         time: '',
         message: ''
     }); 
+   
+    useEffect(() => {
+        const getBookingDate = async () => {
+            const response = await fetch(`http://localhost:8000/api/view/date/${post.date}/`);
+            const data = await response.json();
+            const timingsBooked = data.map((booking) => booking.time);
+            setTimingsBooked(timingsBooked);
+            console.log(timingsBooked);
+        }
+        getBookingDate();
+    }, [post.date]);
+  
+
+  
 
     const handleUpdateSubmit = async (e) => {
         e.preventDefault();
@@ -74,6 +85,7 @@ setSubmitting={setSubmitting}
 updating={updating}
 setUpdating={setUpdating}
 booking={booking}
+timingsBooked={timingsBooked}
 />
 
     </div>

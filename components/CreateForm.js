@@ -1,28 +1,48 @@
-import React, { useState } from 'react'
+import React, { use, useState } from 'react'
 import DigitalClockAmPm from './DigitalClockAmPm'
 import { useContext, useEffect } from 'react'
 import AuthContext from '@/context/AuthContext'
 import SlotPicker from 'slotpicker'
 import {format} from 'date-fns'
+import { useRouter } from 'next/navigation';
 
-const Form = ({ post, setPost, submitting, handleSubmit, updating, handleUpdateSubmit, booking, timingsBooked }) => {
+const Form = ({ post, setPost, submitting, handleSubmit, updating, handleUpdateSubmit, booking, timingsBooked, setTimingsBooked, params }) => {
 
   let {user} = useContext(AuthContext)
-
-  useEffect(() => {
-    setPost({...post, vesselName: user.username})
-  }, [])
+  const router = useRouter()
 
   let newFrom;
 
   useEffect(() => {
     let from = post.time;
     newFrom = from
-    setPost({...post, time: newFrom})
-    console.log(post.time)
+    setPost({...post, vesselName: user.username, time: newFrom})
+    console.log(post)
   }, [post.time])
 
+  useEffect(() => {
+    setPost({...post, date: params.date})
+  }, [params.date])
+
+
+  //useEffect to filter booking by berth
+  const filterByBerth = (berth) => {
+    return booking.filter((booking) => booking.berth === berth)
+  }
+
+  const filterByDate = (date) => {
+    return booking.filter((booking) => booking.date === date)
+  }
+
+
   
+
+  // const filterByDate = booking.filter((booking) => booking.date === post.date)
+
+
+  // console.log(filterByDate)
+
+ 
 
   return (
     <div>
@@ -32,6 +52,43 @@ const Form = ({ post, setPost, submitting, handleSubmit, updating, handleUpdateS
     <input disabled className="input" value={user.username} placeholder={user.username} />
   </div>
 </div>
+
+
+<div className="field">
+    <label className="label">Select Date</label>
+    <input defaultValue={params.date} className="input" type="date" placeholder="Input Date" onChange={(e) => {
+       router.push(`/book/${e.target.value}`);
+    }}
+       ></input>
+</div>
+
+<div className="field">
+  <label className="label">Select Timing</label>
+<SlotPicker
+  // Required, interval between two slots in minutes, 30 = 30 min
+  interval={30}
+  // Required, when user selects a time slot, you will get the 'from' selected value
+  onSelectTime={(from) => {
+    newFrom = from.format('HH:mm')
+    setPost({...post, time: newFrom})
+    // console.log(post.time)
+  }}
+  // Optional, array of unavailable time slots
+  unAvailableSlots={timingsBooked}
+  // Optional, 8AM the start of the slots
+  from={'00:00'}
+  // Optional, 09:00PM the end of the slots
+  to={'23:30'}
+  // Optional, 01:00 PM, will be selected by default
+  defaultSelectedTime={'13:00'}
+  // Optional, selected slot color
+  selectedSlotColor='#F09999'
+  // Optional, language of the displayed text, default is english (en)
+  lang='en'
+/>
+
+</div>
+
 <div className="field">
   <label className="label">Select Berth</label>
   <div className="control">
@@ -54,12 +111,6 @@ const Form = ({ post, setPost, submitting, handleSubmit, updating, handleUpdateS
     </div>
   </div>
 </div>
-
-<div className="field">
-    <label className="label">Select Date</label>
-    <input className="input" type="date" placeholder="Input Date" onChange={(e) => setPost({...post, date: e.target.value})}></input>
-</div>
-
 
 {/* <div className="field">
   <label className="label">Select Timing</label>
@@ -111,32 +162,7 @@ const Form = ({ post, setPost, submitting, handleSubmit, updating, handleUpdateS
 <DigitalClockAmPm timingsBooked={timingsBooked} setPost={setPost} post={post}/>
 </div> */}
 
-<div className="field">
-  <label className="label">Select Timing</label>
-<SlotPicker
-  // Required, interval between two slots in minutes, 30 = 30 min
-  interval={30}
-  // Required, when user selects a time slot, you will get the 'from' selected value
-  onSelectTime={(from) => {
-    newFrom = from.format('HH:mm')
-    setPost({...post, time: newFrom})
-    // console.log(post.time)
-  }}
-  // Optional, array of unavailable time slots
-  unAvailableSlots={timingsBooked}
-  // Optional, 8AM the start of the slots
-  from={'00:00'}
-  // Optional, 09:00PM the end of the slots
-  to={'23:30'}
-  // Optional, 01:00 PM, will be selected by default
-  defaultSelectedTime={'13:00'}
-  // Optional, selected slot color
-  selectedSlotColor='#F09999'
-  // Optional, language of the displayed text, default is english (en)
-  lang='en'
-/>
 
-</div>
 
 <br></br>
 <div className="field">

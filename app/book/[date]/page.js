@@ -5,11 +5,13 @@ import { useRouter } from 'next/navigation';
 import Form from '@/components/CreateForm';
 import { useContext } from 'react';
 import AuthContext from '@/context/AuthContext';
+import BookingContext from '@/context/BookingContext';
 
 
 const page = ({params}) => {
     const [submitting, setSubmitting] = useState(false);
     let {user} = useContext(AuthContext);
+    let {getAllBookings, booking, setBooking, timingsBooked, setTimingsBooked} = useContext(BookingContext);
     const [post , setPost] = useState({
         vesselName: '',
         berth: '',
@@ -18,8 +20,9 @@ const page = ({params}) => {
         message: ''
     }); 
 
-    const [timingsBooked, setTimingsBooked] = useState([]);
-    
+   
+    const router = useRouter();
+
 
     useEffect(() => {
         const getBookingDate = async () => {
@@ -33,13 +36,16 @@ const page = ({params}) => {
 
     console.log([params.date]);
     console.log(timingsBooked);
+    
+
+            
+
 
 
   
     const handleSubmit = async (e) => {
         e.preventDefault();
         setSubmitting(true);
-        console.log(post);
 
         try {
             const response = await fetch('http://localhost:8000/api/create/', 
@@ -55,7 +61,7 @@ const page = ({params}) => {
 
         if (response.ok) {
           alert('Booking created successfully');
-            router.push('/');
+          router.push(`/view/${encodeURIComponent(user.username)}`);
         }
     } catch (error) {
             console.log(error);
@@ -87,6 +93,7 @@ submitting={submitting}
 handleSubmit={handleSubmit}
 setSubmitting={setSubmitting}
 timingsBooked={timingsBooked}
+params={params}
 />
 
     </div>

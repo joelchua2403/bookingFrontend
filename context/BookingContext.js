@@ -14,6 +14,8 @@ export const BookingProvider = ({ children }) => {
 
     const [refreshNeeded, setRefreshNeeded] = useState(false)
 
+    const [timingsBooked, setTimingsBooked] = useState([])
+
 
     const getBooking = async () => {
         let res = await fetch("http://localhost:8000/api/view/all")
@@ -43,7 +45,9 @@ export const BookingProvider = ({ children }) => {
         getAllBookings: getAllBookings,
         getBookingById: getBookingById,
         refreshNeeded: refreshNeeded,
-        setRefreshNeeded: setRefreshNeeded
+        setRefreshNeeded: setRefreshNeeded,
+        timingsBooked: timingsBooked,
+        setTimingsBooked: setTimingsBooked
 
     }
 
