@@ -31,7 +31,7 @@ export const BookingProvider = ({ children }) => {
         let res = await fetch("http://localhost:8000/api/view/all")
         let data = await res.json()
         setBooking(data)
-        console.log( data)
+        console.log( "data", data)
         }
 
         const getBookingById = async (id) => {

@@ -21,6 +21,10 @@ import Switch from '@mui/material/Switch';
 import DeleteIcon from '@mui/icons-material/Delete';
 import FilterListIcon from '@mui/icons-material/FilterList';
 import { visuallyHidden } from '@mui/utils';
+import { useEffect } from 'react';
+
+
+
 
 function createData( id, vessel, date, time, berth, activity) {
   return {
@@ -32,6 +36,8 @@ function createData( id, vessel, date, time, berth, activity) {
     activity
   };
 }
+
+
 
 // const rows = [
 //   createData('BEK', '2023-06-10', '10:00', 'B01', 'Slipping Off'),
@@ -230,12 +236,17 @@ export default function EnhancedTable(booking) {
   const [dense, setDense] = React.useState(false);
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
 
+
+
     const rows = [];
    booking.booking.forEach((data) => {
         rows.push(createData(data.id, data.vesselName, data.date_time.date, data.date_time.time, data.berth, data.activity));
     });
 
-    console.log(rows);
+
+    // console.log("rows:", rows);
+
+ 
     
 
   const handleRequestSort = (event, property) => {
@@ -246,7 +257,7 @@ export default function EnhancedTable(booking) {
 
   const handleSelectAllClick = (event) => {
     if (event.target.checked) {
-      const newSelected = rows.map((n) => n.vessel);
+      const newSelected = rows.map((n) => n.id);
       setSelected(newSelected);
       return;
     }
@@ -321,13 +332,13 @@ export default function EnhancedTable(booking) {
             />
             <TableBody>
               {visibleRows.map((row, index) => {
-                const isItemSelected = isSelected(row.vessel);
+                const isItemSelected = isSelected(row.id);
                 const labelId = `enhanced-table-checkbox-${index}`;
 
                 return (
                   <TableRow
                     hover
-                    onClick={(event) => handleClick(event, row.vessel)}
+                    onClick={(event) => handleClick(event, row.id)}
                     role="checkbox"
                     aria-checked={isItemSelected}
                     tabIndex={-1}
