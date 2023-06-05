@@ -3,44 +3,53 @@ import DigitalClockAmPm from './DigitalClockAmPm'
 import { useContext, useEffect } from 'react'
 import AuthContext from '@/context/AuthContext'
 import SlotPicker from 'slotpicker'
-import {format} from 'date-fns'
+import {format, set} from 'date-fns'
 import { useRouter } from 'next/navigation';
 
-const Form = ({ post, setPost, submitting, handleSubmit, updating, handleUpdateSubmit, booking, timingsBooked, setTimingsBooked, params }) => {
+const Form = ({ post, setPost, submitting, handleSubmit, updating, handleUpdateSubmit, booking, timingsBooked, setTimingsBooked, params, filteredDate, setFilteredDate }) => {
 
   let {user} = useContext(AuthContext)
   const router = useRouter()
 
   let newFrom;
 
-  useEffect(() => {
-    let from = post.time;
-    newFrom = from
-    setPost({...post, vesselName: user.username, time: newFrom})
-    console.log(post)
-  }, [post.time])
+  // useEffect(() => {
+  //   let from = post.time;
+  //   newFrom = from
+  //   // setPost({...post, vesselName: user.username, date_time: {date: params.date, time: newFrom}})
+  //   // console.log(post)
+  //   setPost({...post, date_time: {
+  //     ...post.date_time,
+  //     time: newFrom
+  //   } })
+  // }, [post.date_time.time])
 
   useEffect(() => {
-    setPost({...post, date: params.date})
+    setPost({...post, date_time: {
+      date: params.date,
+    } })
+    console.log(post)
   }, [params.date])
 
+  useEffect(() => {
+    let from = post.date_time.time;
+    newFrom = from
+    setPost({...post, vesselName: user.username, date_time: { date: params.date, time: newFrom}})
+    console.log(post)
+  }, [post.date_time.time])
+ 
+  useEffect(() => {
+    const filteredData = booking.filter((booking) => booking.date_time.date === params.date )
+    setFilteredDate(filteredData)
+    let timesBooked = []
+    filteredDate.map((time) => {
+      timesBooked.push(time.date_time.time)
+    })
+    setTimingsBooked(timesBooked)
+    timesBooked = []
+    console.log(timingsBooked)
+  }, [params.date, booking])
 
-  //useEffect to filter booking by berth
-  const filterByBerth = (berth) => {
-    return booking.filter((booking) => booking.berth === berth)
-  }
-
-  const filterByDate = (date) => {
-    return booking.filter((booking) => booking.date === date)
-  }
-
-
-  
-
-  // const filterByDate = booking.filter((booking) => booking.date === post.date)
-
-
-  // console.log(filterByDate)
 
  
 
@@ -56,7 +65,10 @@ const Form = ({ post, setPost, submitting, handleSubmit, updating, handleUpdateS
 
 <div className="field">
     <label className="label">Select Date</label>
-    <input defaultValue={params.date} className="input" type="date" placeholder="Input Date" onChange={(e) => {
+    <input  defaultValue={params.date} className="input" type="date" placeholder="Input Date" onChange={(e) => {
+      setPost({...post, date_time: {
+        ...post.date_time,
+        date: e.target.value}})
        router.push(`/book/${e.target.value}`);
     }}
        ></input>
@@ -70,7 +82,9 @@ const Form = ({ post, setPost, submitting, handleSubmit, updating, handleUpdateS
   // Required, when user selects a time slot, you will get the 'from' selected value
   onSelectTime={(from) => {
     newFrom = from.format('HH:mm')
-    setPost({...post, time: newFrom})
+    setPost({...post, date_time: {
+      ...post.date_time,
+      time: newFrom}})
     // console.log(post.time)
   }}
   // Optional, array of unavailable time slots
@@ -162,11 +176,56 @@ const Form = ({ post, setPost, submitting, handleSubmit, updating, handleUpdateS
 <DigitalClockAmPm timingsBooked={timingsBooked} setPost={setPost} post={post}/>
 </div> */}
 
+<div className="field">
+  <label className="label">Select Activity</label>
+  <div className="control">
+    <div className="select">
+      <select onChange={(e) => setPost({...post, activity: e.target.value})}>
+      <option>Select Activity</option >
+    <option value="Slipoff">Slipoff</option >
+    <option value="Alongside">Alongside</option >
+    <option value="Training Within Basin">Training Within Basin</option >
+    <option value="Training Outside Basin">Training Outside Basin</option >
+    </select>
+    </div>
+</div>
+</div>
+
+<div className="field">
+  <label className="label">Require Pilot</label>
+  <div className="control">
+    <div className="select">
+      <select onChange={(e) => setPost({...post, pilot: e.target.value})}>
+      <option>Select Pilot</option >
+    <option value="Yes">Yes</option >
+    <option value="No">No</option >
+    </select>
+    </div>
+</div>
+</div>
+
+
+  <div className="field">
+  <label className="label">Select Number Of Tugs</label>
+  <div className="control">
+    <div className="select">
+      <select onChange={(e) => setPost({...post, tug: e.target.value})}>
+      <option>Select Number Of Tugs</option >
+      <option value="0">0</option >
+    <option value="1">1</option >
+    <option value="2">2</option >
+    <option value="3">3</option >
+    </select>
+    </div>
+</div>
+</div>
+   
+
 
 
 <br></br>
 <div className="field">
-  <label className="label">Message</label>
+  <label className="label">Remarks</label>
   <div className="control">
     <textarea className="textarea" placeholder="Nil if none" onChange={(e) => setPost({...post, message: e.target.value})}></textarea>
   </div>

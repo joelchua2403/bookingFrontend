@@ -66,7 +66,11 @@ const page = ({params}) => {
 }}
   ></input>
 </div>
-</div>
+
+<section className="section is-medium">
+  <br></br>
+  </section>
+    </div>
 
 
   )

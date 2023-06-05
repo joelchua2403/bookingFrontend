@@ -15,7 +15,6 @@ const page = () => {
 
   useEffect(() => {
     getBooking();
-    console.log("booking:", booking)
     console.log("refreshNeeded:", refreshNeeded)
   }, [refreshNeeded])
 
@@ -44,11 +43,14 @@ if (booking.length === 0) {
        <div className="box" key={booking.id}>
         <h3><strong> Vessel name: </strong> {booking.vesselName}</h3>
        <h3><strong> Booking ID: </strong> {booking.id}</h3>
-       <h3> <strong>Date: </strong>{booking.date}</h3>
-       <h3><strong>Time: </strong> {booking.time}</h3>
+        <h3><strong> Date: </strong> {booking.date_time.date}</h3>
+          <h3><strong> Time: </strong> {booking.date_time.time}</h3>
        <h3> <strong>Berth: </strong> {booking.berth}</h3>
-       <h3><strong>Your message: </strong>{booking.message}</h3>
-      <Link href={`/update/${encodeURIComponent(booking.id)}`}><button className="button is-primary is-light" >Edit</button></Link>
+       <h3><strong>Activity:</strong> {booking.activity.toUpperCase()} </h3>
+       <h3><strong>Remarks: </strong>{(booking.message).toUpperCase()}</h3>
+        <h3><strong>Pilot Required: </strong>{booking.pilot.toUpperCase()}</h3>
+        <h3><strong>No of Tugs: </strong>{booking.tug}</h3>
+      {/* <Link href={`/update/${encodeURIComponent(booking.id)}`}><button className="button is-primary is-light" >Edit</button></Link> */}
       <Link href={`/delete/${encodeURIComponent(booking.id)}`}><button className="button is-danger is-light">Delete</button></Link>
       </div>
       </section> 

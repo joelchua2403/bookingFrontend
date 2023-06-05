@@ -23,6 +23,19 @@ const Form = ({
 
   let newFrom;
 
+  useEffect(() => {
+    const filteredData = booking.filter((booking) => booking.date_time.date === booking.date_time.date )
+    setFilteredDate(filteredData)
+    let timesBooked = []
+    filteredDate.map((time) => {
+      timesBooked.push(time.date_time.time)
+    })
+    setTimingsBooked(timesBooked)
+    timesBooked = []
+    console.log(timingsBooked)
+  }, [post.date_time.date, booking])
+
+
   
 
   useEffect(() => {

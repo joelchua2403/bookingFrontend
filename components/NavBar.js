@@ -46,9 +46,9 @@ const Navbar = () => {
 
     {newUser ? (
       <>
-      <a className="navbar-item">
+     <Link className="navbar-item" href="/schedule">
         Schedule
-      </a>
+      </Link>
 
       <div className="navbar-item has-dropdown is-hoverable">
         <a className="navbar-link">
@@ -60,13 +60,13 @@ const Navbar = () => {
     
             <Link className="navbar-item" href={`/view/${encodeURIComponent(user.username)}`}>View bookings</Link>
          
-          <a className="navbar-item">
+          {/* <a className="navbar-item">
             Cancel/Edit booking
-          </a>
-          <hr className="navbar-divider" />
+          </a> */}
+          {/* <hr className="navbar-divider" />
           <a className="navbar-item">
             Report an issue
-          </a>
+          </a> */}
         </div>
       </div>
 

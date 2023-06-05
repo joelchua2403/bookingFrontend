@@ -10,28 +10,34 @@ import Form from '@/components/UpdateForm';
 
 const page = ({params}) => {
     const router = useRouter();
-    const {booking, getBooking, timingsBooked, setTimingsBooked} = useContext(BookingContext)
+    const {booking, getBooking, timingsBooked, setTimingsBooked, getAllBookings} = useContext(BookingContext)
     const [submitting, setSubmitting] = useState(false);
     const [updating, setUpdating] = useState(false);
     let {user} = useContext(AuthContext);
     const [post , setPost] = useState({
         vesselName: '',
         berth: '',
-        date: '',
-        time: '',
+        Date: '',
+        Time: '',
         message: ''
     }); 
    
+    // useEffect(() => {
+    //     const getBookingDate = async () => {
+    //         const response = await fetch(`http://localhost:8000/api/view/Date/${post.Date}/`);
+    //         const data = await response.json();
+    //         const timingsBooked = data.map((booking) => booking.Time.time);
+    //         setTimingsBooked(timingsBooked);
+    //         console.log(timingsBooked);
+    //     }
+    //     getBookingDate();
+    // }, [post.Date]);
+
     useEffect(() => {
-        const getBookingDate = async () => {
-            const response = await fetch(`http://localhost:8000/api/view/date/${post.date}/`);
-            const data = await response.json();
-            const timingsBooked = data.map((booking) => booking.time);
-            setTimingsBooked(timingsBooked);
-            console.log(timingsBooked);
-        }
-        getBookingDate();
-    }, [post.date]);
+        getAllBookings();
+    }, []);
+
+
   
 
   

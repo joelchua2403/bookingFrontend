@@ -1,5 +1,5 @@
 'use client';
-import React, {useState, useEffect, use} from 'react';
+import React, {useState, useEffect} from 'react';
 import { useSession } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
 import Form from '@/components/CreateForm';
@@ -15,28 +15,37 @@ const page = ({params}) => {
     const [post , setPost] = useState({
         vesselName: '',
         berth: '',
-        date: '',
-        time: '',
-        message: ''
+        date_time: {
+            date: '',
+            time: ''
+        },
+        message: '',
+        activity: '',
+        pilot: 'No',
+        tug: 0
     }); 
-
+    const [filteredDate, setFilteredDate] = useState([]);
+    const [bookings , setBookings] = useState([]);
    
     const router = useRouter();
 
 
-    useEffect(() => {
-        const getBookingDate = async () => {
-            const response = await fetch(`http://localhost:8000/api/view/date/${params.date}/`);
-            const data = await response.json();
-            const timingsBooked = data.map((booking) => booking.time);
-            setTimingsBooked(timingsBooked);
-        }
-        getBookingDate();
-    }, [post.date]);
+    // useEffect(() => {
+    //     const getBookingDate = async () => {
+    //         const response = await fetch(`http://localhost:8000/api/view/date/${params.date}/`);
+    //         const data = await response.json();
+    //         const timingsBooked = data.map((booking) => booking.date_time.time);
+    //         setTimingsBooked(timingsBooked);
+    //         console.log(timingsBooked);
+    //     }
+    //     getBookingDate();
+    // }, [params.date]);
 
-    console.log([params.date]);
-    console.log(timingsBooked);
-    
+    useEffect(() => {
+        getAllBookings();
+    }, []);
+
+   
 
             
 
@@ -93,7 +102,11 @@ submitting={submitting}
 handleSubmit={handleSubmit}
 setSubmitting={setSubmitting}
 timingsBooked={timingsBooked}
+setTimingsBooked={setTimingsBooked}
 params={params}
+filteredDate={filteredDate}
+setFilteredDate={setFilteredDate}
+booking={booking}
 />
 
     </div>

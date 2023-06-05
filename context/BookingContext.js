@@ -12,6 +12,8 @@ export const BookingProvider = ({ children }) => {
 
     const [booking, setBooking] = useState([])
 
+    const [bookings, setBookings] = useState([])
+
     const [refreshNeeded, setRefreshNeeded] = useState(false)
 
     const [timingsBooked, setTimingsBooked] = useState([])
@@ -47,8 +49,9 @@ export const BookingProvider = ({ children }) => {
         refreshNeeded: refreshNeeded,
         setRefreshNeeded: setRefreshNeeded,
         timingsBooked: timingsBooked,
-        setTimingsBooked: setTimingsBooked
-
+        setTimingsBooked: setTimingsBooked,
+        bookings: bookings,
+        setBookings: setBookings
     }
 
 
