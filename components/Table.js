@@ -22,14 +22,14 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import FilterListIcon from '@mui/icons-material/FilterList';
 import { visuallyHidden } from '@mui/utils';
 
-function createData( vessel, date, time, berth, activity, id) {
+function createData( id, vessel, date, time, berth, activity) {
   return {
+    id,
     vessel,
     date,
     time,
     berth,
-    activity,
-    id
+    activity
   };
 }
 
@@ -331,7 +331,7 @@ export default function EnhancedTable(booking) {
                     role="checkbox"
                     aria-checked={isItemSelected}
                     tabIndex={-1}
-                    key={row.vessel}
+                    key={row.id}
                     selected={isItemSelected}
                     sx={{ cursor: 'pointer' }}
                   >
@@ -350,13 +350,14 @@ export default function EnhancedTable(booking) {
                       scope="row"
                       padding="none"
                     >
-                      {row.vessel}
+                      {row.id}
                     </TableCell>
+                    <TableCell align="right">{row.vessel}</TableCell>
                     <TableCell align="right">{row.date}</TableCell>
                     <TableCell align="right">{row.time}</TableCell>
                     <TableCell align="right">{row.berth}</TableCell>
                     <TableCell align="right">{row.activity}</TableCell>
-                    <TableCell align="right">{row.id}</TableCell>
+                    <TableCell align="right">{row.activity}</TableCell>
                   </TableRow>
                 );
               })}
