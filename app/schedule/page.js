@@ -3,15 +3,25 @@ import React, { useEffect, useState, useContext} from 'react'
 // import EnhancedTable from '@/components/ScheduleTable'
 import EnhancedTable from '@/components/Table'
 import BookingContext from '@/context/BookingContext';
+import { useRouter } from 'next/navigation';
 import { set } from 'date-fns';
 
 
 const page = () => {
-    const {getAllBookings, bookings, setBookings, booking} = useContext(BookingContext);
+    const {getAllBookings, bookings, setBookings, booking, rowsPerPage, setRowsPerPage } = useContext(BookingContext);
+    const router = useRouter();
+  
+
+
 
 useEffect(() => {
     getAllBookings();
+    setTimeout(() => {
+      setRowsPerPage(10)
+    }
+    , 100);
 }, []);
+
 
   return (
     <div>

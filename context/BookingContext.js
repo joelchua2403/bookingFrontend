@@ -18,6 +18,8 @@ export const BookingProvider = ({ children }) => {
 
     const [timingsBooked, setTimingsBooked] = useState([])
 
+    const [rowsPerPage, setRowsPerPage] = useState(5);
+
 
     const getBooking = async () => {
         let res = await fetch("http://localhost:8000/api/view/all")
@@ -51,7 +53,9 @@ export const BookingProvider = ({ children }) => {
         timingsBooked: timingsBooked,
         setTimingsBooked: setTimingsBooked,
         bookings: bookings,
-        setBookings: setBookings
+        setBookings: setBookings,
+        rowsPerPage: rowsPerPage,
+        setRowsPerPage: setRowsPerPage
     }
 
 

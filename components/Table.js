@@ -22,6 +22,9 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import FilterListIcon from '@mui/icons-material/FilterList';
 import { visuallyHidden } from '@mui/utils';
 import { useEffect } from 'react';
+import { set } from 'date-fns';
+import { useContext } from 'react';
+import BookingContext from '@/context/BookingContext';
 
 
 
@@ -203,7 +206,7 @@ function EnhancedTableToolbar(props) {
           id="tableTitle"
           component="div"
         >
-          Nutrition
+          All Bookings
         </Typography>
       )}
 
@@ -234,9 +237,14 @@ export default function EnhancedTable(booking) {
   const [selected, setSelected] = React.useState([]);
   const [page, setPage] = React.useState(0);
   const [dense, setDense] = React.useState(false);
-  const [rowsPerPage, setRowsPerPage] = React.useState(5);
+  // const [rowsPerPage, setRowsPerPage] = React.useState(5);
 
+  // useContext 
 
+  const { rowsPerPage, setRowsPerPage } = useContext(BookingContext);
+
+ 
+  
 
     const rows = [];
    booking.booking.forEach((data) => {
@@ -367,7 +375,6 @@ export default function EnhancedTable(booking) {
                     <TableCell align="right">{row.date}</TableCell>
                     <TableCell align="right">{row.time}</TableCell>
                     <TableCell align="right">{row.berth}</TableCell>
-                    <TableCell align="right">{row.activity}</TableCell>
                     <TableCell align="right">{row.activity}</TableCell>
                   </TableRow>
                 );
